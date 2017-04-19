@@ -26,6 +26,19 @@ public class ImageCropTest {
     }
 
     @Test
+    public void testCrop2() {
+        BufferedImage testImage = loadImage("src/test/resources/cropTest2.jpg");
+        int width = testImage.getWidth();
+
+        BufferedImage cropped = ImageCrop.cropLetterBoxing(testImage, 0.04);
+        int croppedHeight = cropped.getHeight();
+        int croppedWidth = cropped.getWidth();
+
+        assertEquals(250, croppedHeight);
+        assertEquals(width, croppedWidth);
+    }
+
+    @Test
     public void testNoCrop() {
         BufferedImage testImage = loadImage("src/test/resources/noCrop.jpg");
         BufferedImage cropped = ImageCrop.cropLetterBoxing(testImage, 0.04);
