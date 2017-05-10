@@ -20,16 +20,29 @@ public class ImageCropTest {
         BufferedImage cropped = ImageCrop.cropLetterBoxing(testImage, 0.04);
         int croppedHeight = cropped.getHeight();
         int croppedWidth = cropped.getWidth();
-
         assertEquals(549, croppedHeight);
         assertEquals(width, croppedWidth);
     }
 
     @Test
+    public void testCropHigherTolerance() {
+        BufferedImage testImage = loadImage("src/test/resources/cropTest2.jpg");
+        int width = testImage.getWidth();
+
+        BufferedImage cropped = ImageCrop.cropLetterBoxing(testImage, 0.1);
+        int croppedHeight = cropped.getHeight();
+        int croppedWidth = cropped.getWidth();
+        assertEquals(249, croppedHeight);
+        assertEquals(width, croppedWidth);
+    }
+
+
+    @Test
     public void testNoCrop() {
         BufferedImage testImage = loadImage("src/test/resources/noCrop.jpg");
         BufferedImage cropped = ImageCrop.cropLetterBoxing(testImage, 0.04);
-        assertTrue(testImage == cropped);
+        BufferedImage cropped2 = ImageCrop.cropPillarBoxing(cropped, 0.04);
+        assertTrue(testImage == cropped2);
     }
 
     @Test
@@ -39,6 +52,25 @@ public class ImageCropTest {
         assertTrue(testImage == cropped);
     }
 
+    @Test
+    public void testPillarBoxCrop() {
+        BufferedImage testImage = loadImage("src/test/resources/tmv.jpg");
+        BufferedImage cropped = ImageCrop.cropPillarBoxing(testImage, 0.04);
+        assertEquals(1735, cropped.getWidth());
+    }
+
+
+    @Test
+    public void testCropLetterAndPillarBox() {
+        BufferedImage testImage = loadImage("src/test/resources/allborders.jpg");
+        BufferedImage cropped = ImageCrop.cropLetterBoxing(testImage, 0.04);
+        BufferedImage cropped2 = ImageCrop.cropPillarBoxing(cropped, 0.04);
+        assertEquals(861, cropped2.getWidth());
+        assertEquals(484, cropped2.getHeight());
+
+    }
+
+
     private BufferedImage loadImage(String path) {
         try {
             return ImageIO.read(new File(path));
@@ -46,5 +78,4 @@ public class ImageCropTest {
             throw new RuntimeException(e);
         }
     }
-
 }
